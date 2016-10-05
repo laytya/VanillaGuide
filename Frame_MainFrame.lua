@@ -3,7 +3,7 @@
 ------------------
 Frame_MainFrame.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
     	Main Frame Object
@@ -24,6 +24,8 @@ Description:
 		obj.SetMetaMapDestination(self, nX, nY, sZone, title, step, label, mode)
 			Diffentes modes, produces different behaviour, 
 			see the source for insight
+	1.04.3
+		-- no changes in here for this revision
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------

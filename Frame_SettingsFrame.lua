@@ -3,7 +3,7 @@
 ------------------
 Frame_SettingsFrame.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
     	Settings Frame Object
@@ -19,6 +19,8 @@ Description:
 	1.04.2
 		-- One more setting for MetaMapNotes
 		(like the one for MetaMapBWP)
+	1.04.3
+		-- no changes in here for this revision
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------

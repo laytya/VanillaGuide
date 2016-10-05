@@ -3,7 +3,7 @@
 ------------------
 Core.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
         Powerleveling Guide for 1.12.1 servers
@@ -25,6 +25,8 @@ Description:
             .GuideTables, containing the actual guides
     1.04.2
         -- no changes in here for this revision
+	1.04.3
+		-- no changes in here for this revision
 --]]--------------------------------------------------
 
 --[[--------------------------------------------------

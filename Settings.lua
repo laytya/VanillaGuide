@@ -3,7 +3,7 @@
 ------------------
 Settings.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
     	This object handles the various addon settings
@@ -22,6 +22,8 @@ Description:
 			Now support for MetaMapNotes, too
 		-- Added a function for a proper MetaMap checking
 			MetaMapBWPSupportCheck()
+	1.04.3
+		-- no changes in here for this revision
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------

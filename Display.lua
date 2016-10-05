@@ -3,7 +3,7 @@
 ------------------
 Display.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
 		The Display object keeps track of what 
@@ -21,6 +21,8 @@ Description:
 			It'll communicate with the GuideTable object
 			getting guides and steps from there...hopefully...
 	1.04.2
+		-- no changes in here for this revision
+	1.04.3
 		-- no changes in here for this revision
 ------------------------------------------------------
 Connection:

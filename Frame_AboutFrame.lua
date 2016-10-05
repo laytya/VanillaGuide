@@ -3,7 +3,7 @@
 ------------------
 Frame_AboutFrame.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
 	    About Frame Object
@@ -17,6 +17,8 @@ Description:
 	1.04.1
 		-- About Frame object
 	1.04.2
+		-- no changes in here for this revision
+	1.04.3
 		-- no changes in here for this revision
 ------------------------------------------------------
 Connection:

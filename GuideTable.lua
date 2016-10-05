@@ -3,7 +3,7 @@
 ------------------
 GuideTable.lua
 Authors: mrmr
-Version: 1.04.2
+Version: 1.04.3
 ------------------------------------------------------
 Description: 
     	Object Handling the Guides
@@ -21,6 +21,8 @@ Description:
 			function to retrive informations too
 	1.04.2
 		-- no changes in here for this revision
+	1.04.3
+		-- Fixed typo for Loch Modan and Redridge Mountains
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -214,7 +216,7 @@ function objGuideTable:new(oSettings)
 
 			["Humans"] = {
 				{ "v", "1-10 Elwynn Forest", id = nil },
-				{ "v", "10-12 Westfall and Lock Modan", id = nil },
+				{ "v", "10-12 Westfall and Loch Modan", id = nil },
 			},
 			["Dwarves & Gnomes"] = {
 				{ "v", "1-6 Cold Ridge Valley", id = nil },
@@ -228,7 +230,7 @@ function objGuideTable:new(oSettings)
 				{ "v", "12-14 Darkshore", id = nil },
 				{ "v", "14-17 Darkshore", id = nil },
 				{ "v", "17-18 Loch Modan", id = nil },
-				{ "v", "18-20 Redredge Mountains", id = nil },
+				{ "v", "18-20 Redridge Mountains", id = nil },
 			},
 			["[A] 20-30"] = {
 				{ "v", "20-21 Darkshore", id = nil },
@@ -540,7 +542,7 @@ do
 	}
 	Table_002_ElwynnForest = {
 		[0110] = {	title = "1-10 Elwynn Forest" },
-		[1012] = {	title = "10-12 Westfall and Lock Modan" },
+		[1012] = {	title = "10-12 Westfall and Loch Modan" },
 	}
 -----------------------------------------------------------------
 	Table_003_Horde_12to20 = {
@@ -611,7 +613,7 @@ do
 		[1214] = {	title = "12-14 Darkshore" },
 		[1417] = {	title = "14-17 Darkshore" },
 		[1718] = {	title = "17-18 Loch Modan" },
-		[1820] = {	title = "18-20 Redredge Mountains" },
+		[1820] = {	title = "18-20 Redridge Mountains" },
 	}
 	Table_003_Alliance_20to30 = {
 		[2021] = {  title = "20-21 Darkshore" },
