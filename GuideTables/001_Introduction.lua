@@ -1,7 +1,7 @@
 --[[--------------------------------------------------
 001-Introduction.lua
 Authors: mrmr
-Version: 1.04.3
+Version: 1.04.2
 ------------------------------------------------------
 Description: Guide Serie - 001 Introduction
     1.04.1
@@ -9,8 +9,8 @@ Description: Guide Serie - 001 Introduction
             Introduction text
     1.04.2
         -- no changes in here for this revision
-	1.04.3
-		-- no changes in here for this revision
+    2.0.1
+        -- Add colors to guide color codes because I like rainbows
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -38,10 +38,10 @@ Table_001_Introduction = {
             [10] = { str = "#ACCEPTAccept a quest.#" },
             [11] = { str = "#DOQUESTGo do a quest.#" },
             [12] = { str = "#TURNINTurn in a quest.#" },
-            [13] = { str = "#NPCGeneral mob/item.#" },
-            [14] = { str = "." },
-            [15] = { str = "." },
-            [16] = { str = "." },
+            [13] = { str = "#NPCGeneral mob/item/Skipped Quest.#" },
+            [14] = { str = "#HUNTER Class Specifc Quests.#" },
+            [15] = { str = "#PICTURE Travel Directions.#" },
+            [16] = { str = "#COORDS Quest Objectives.#" },
             [17] = { str = "#ACCEPTBINDABLE KEYS:#  There are bindable keys for the \"Prev\" and \"Next\" Steps and Guides. You can find them in the key bindings menu" },
             [18] = { str = "." },
             --[19] = { str = "." },
