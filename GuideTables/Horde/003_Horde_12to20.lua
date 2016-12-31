@@ -10,6 +10,8 @@ Description: Guide Serie - 003 From Lvl 12 to Lvl 20
             from level 12 to lever 20
     1.04.2
     	-- no changes in here for this revision
+    1.05.0
+    	-- Reverting early change due to bug being server side. Steps 8-12 in 12-15 Barrens. This is the correct quest chain patch 1.12.1 and 2.4.3
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -35,7 +37,7 @@ Table_003_Horde_12to20 = {
 			[10] = { str = "09) Once #DOQUEST\"Disrupt the Attacks\"# is completed go turn it in (at 52.30) and accept #ACCEPT\"Supplies for the Crossroads\" ", x = 52, y = 30, zone = "The Barrens" },
 			[11] = { str = "10) Go do #DOQUEST\"Supplies for the Crossroads\"# (at 56.26), then run back to Thork and #ACCEPT\"The Disruption Ends\"#, you'll be going back up to the razormanes one more time.", x = 56, y = 26, zone = "The Barrens" },
 			[12] = { str = "11) If you find #ACCEPT\"Chen's Empty Keg\"# accept it." },
-			[13] = { str = "12) Once #DOQUEST\"Plainstrider Menace\"# & #DOQUEST\"The Disruption Ends\"# and are complete..." },    
+			[13] = { str = "12) Once #DOQUEST\"Plainstrider Menace\"# & #DOQUEST\"The Disruption Ends\"# are complete..." },    
 			[14] = { str = "13) Go to Ratchet, get the Flight Path there (63.37) and accept #ACCEPT\"Raptor Horns\"# #ACCEPT\"Samophlange\"# #ACCEPT\"Southsea Freebooters\"#  #ACCEPT\"The Guns of Northwatch\"# .  Turn in #TURNIN\"Chen's Empty Keg\"# if you have it ... accept the next part to it, and focus on doing this quest while throughout the Barrens.", x = 63, y = 37, zone = "The Barrens" },
 			[15] = { str = "14) Grab the quest #ACCEPT\"WANTED: Baron Longshore\"# (the wanted sign by the bank)" },
 			[16] = { str = "15) Turn in #TURNIN\"Wharfmaster Dizzywig\"# (goblin on the docks) accept #ACCEPT\"Miner's Fortune\"# " },

@@ -10,7 +10,7 @@ Description: Guide Serie - 002 Tirisfal Glades
             from level 1 to lever 12
     1.04.2
     	-- no changes in here for this revision
-    1.05.1
+    1.05.0
     	-- Major Change
     		Clean up and organzation done to 6-10 leveling gyide and 10-12 leveling, add heart usage, leveing paths are still the same but WIP
 ------------------------------------------------------
