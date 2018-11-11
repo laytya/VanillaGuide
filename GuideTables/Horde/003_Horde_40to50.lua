@@ -66,7 +66,7 @@ Table_003_Horde_40to50 = {
 			[1] = { str = "41-42 Swamp of Sorrows" },
 			[2] = { str = "01) Start off doing: #DOQUEST\"Dream Dust in the Swamp\"# (14.59) It may take several trips to that area to complete it..", x = 14, y = 59, zone = "Swamp of Sorrows" },
 			[3] = { str = "02) #DOQUEST\"Nothing But the Truth\"#  kill the Mire Lord for the Mire Lord Fungus (at 6.32)", x = 6, y = 32, zone = "Swamp of Sorrows" },
-			[4] = { str = "03) Find and kill #NPCCudgel#, he drops Noboru's Cudgel, which starts #ACCEPT\"Noboru the Cudgel\"# " },
+			[4] = { str = "03) Find and kill #NPCCudgel#  (at 47.39), he drops Noboru's Cudgel, which starts #ACCEPT\"Noboru the Cudgel\"# " },
 			[5] = { str = "04) Go turn in #TURNIN\"Noboru the Cudgel\"# (25.31) ... accept #ACCEPT\"Draenethyst Crystals\"# ", x = 25, y = 31, zone = "Swamp of Sorrows" },
 			[6] = { str = "05) Grind to Stonard (45.54)", x = 45, y = 54, zone = "Swamp of Sorrows" },
 			[7] = { str = "06) Make Stonard your home." },

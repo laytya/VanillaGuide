@@ -1,6 +1,6 @@
 --[[
 Name: Tablet-2.0
-Revision: $Rev: 16292 $
+Revision: $Rev: 17873 $
 Author(s): ckknight (ckknight@gmail.com)
 Website: http://ckknight.wowinterface.com/
 Documentation: http://wiki.wowace.com/index.php/Tablet-2.0
@@ -10,7 +10,7 @@ Dependencies: AceLibrary, (optional) Dewdrop-2.0
 ]]
 
 local MAJOR_VERSION = "Tablet-2.0"
-local MINOR_VERSION = "$Revision: 16292 $"
+local MINOR_VERSION = "$Revision: 17873 $"
 
 if not AceLibrary then error(MAJOR_VERSION .. " requires AceLibrary") end
 if not AceLibrary:IsNewVersion(MAJOR_VERSION, MINOR_VERSION) then return end
@@ -46,6 +46,20 @@ if GetLocale() == "deDE" then
 	COLOR_DESC = "Hintergrundfarbe setzen."
 	LOCK = "Sperren"
 	LOCK_DESC = "Sperrt die aktuelle Position vom Tooltip. Alt+Rechts-klick f\195\188rs Men\195\188 oder Alt+Verschieben f\195\188rs verschieben wenn es gesperrt ist."
+elseif  GetLocale() == "ruRU" then
+	SCROLL_UP = "Прокрутка вверх"
+	SCROLL_DOWN = "Прокрутка вниз"
+	HINT = "Совет"
+	DETACH = "Отделить"
+	DETACH_DESC = "Отделить планшет от его источника."
+	SIZE = "Размер"
+	SIZE_DESC = "Масштаб планшета."
+	CLOSE_MENU = "Закрыть меню"
+	CLOSE_MENU_DESC = "Закрыть меню."
+	COLOR = "Цвет фона"
+	COLOR_DESC = "Установить цвет фона."
+	LOCK = "Зафиксировать"
+	LOCK_DESC = "Зафиксировать планшет в его текущем позиции. Alt+ПКМ для меню или Alt+перетаскивание для перетаскивания когда планшет зафиксирован."
 elseif GetLocale() == "koKR" then
 	SCROLL_UP = "위로 스크롤"
 	SCROLL_DOWN = "아래로 스크롤"
@@ -161,16 +175,8 @@ local sekeys
 local CleanCategoryPool
 local pool = {}
 
-local table_setn
-do
-	local version = GetBuildInfo()
-	if string.find(version, "^2%.") then
-		-- 2.0.0
-		table_setn = function() end
-	else
-		table_setn = table.setn
-	end
-end
+local lua51 = loadstring("return function(...) return ... end") and true or false
+local table_setn = lua51 and function() end or table.setn
 
 local function del(t)
 	if t then
@@ -314,6 +320,7 @@ do
 		self.width = 0--(MIN_TOOLTIP_SIZE - 20)*tablet.fontSizePercent
 		self.tablet = tablet
 		self.title = "Title"
+		self.titleR, self.titleG, self.titleB = nil, nil, nil
 		setmetatable(self, TabletData_mt)
 		return self
 	end
@@ -335,6 +342,11 @@ do
 				'font', GameTooltipHeaderText,
 				'isTitle', true
 			)
+			if self.titleR then
+				info.textR = self.titleR
+				info.textG = self.titleG
+				info.textB = self.titleB
+			end
 			self:AddCategory(info, 1)
 			del(info)
 		end
@@ -418,13 +430,19 @@ do
 		end
 		return cat
 	end
-
+	
 	function TabletData:SetHint(hint)
 		self.hint = hint
 	end
-
+	
 	function TabletData:SetTitle(title)
 		self.title = title or "Title"
+	end
+	
+	function TabletData:SetTitleColor(r, g, b)
+		self.titleR = r
+		self.titleG = g
+		self.titleB = b
 	end
 end
 do
@@ -2200,6 +2218,7 @@ function Tablet:Close(parent)
 			tooltip:Hide()
 			tooltip.registration.tooltip = nil
 			tooltip.registration = nil
+			tooltip.enteredFrame = false
 		end
 		return
 	else
@@ -2216,14 +2235,19 @@ function Tablet:Close(parent)
 		tooltip.registration.tooltip = nil
 		tooltip.registration = nil
 	end
+	tooltip.enteredFrame = false
 end
 Tablet.Close = wrap(Tablet.Close, "Tablet:Close")
 
 local currentFrame
 local currentTabletData
 
-function Tablet:Open(parent)
-	self:argCheck(parent, 2, "table", "string")
+function Tablet:Open(fakeParent, parent)
+	self:argCheck(fakeParent, 2, "table", "string")
+	self:argCheck(parent, 3, "nil", "table", "string")
+	if not parent then
+		parent = fakeParent
+	end
 	local info = self.registry[parent]
 	self:assert(info, "You cannot open a tablet with an unregistered parent frame.")
 	self:Close()
@@ -2252,19 +2276,19 @@ function Tablet:Open(parent)
 			currentFrame = nil
 		end
 	end
-	frame:SetOwner(parent)
+	frame:SetOwner(fakeParent)
 	frame:children()
 	local point = info.point
-	local relativePoint = info.point
+	local relativePoint = info.relativePoint
 	if type(point) == "function" then
 		local b
-		point, b = point(parent)
+		point, b = point(fakeParent)
 		if b then
 			relativePoint = b
 		end
 	end
 	if type(relativePoint) == "function" then
-		relativePoint = relativePoint(parent)
+		relativePoint = relativePoint(fakeParent)
 	end
 	if not point then
 		point = "CENTER"
@@ -2274,7 +2298,7 @@ function Tablet:Open(parent)
 	end
 	frame:ClearAllPoints()
 	if type(parent) ~= "string" then
-		frame:SetPoint(point, parent, relativePoint)
+		frame:SetPoint(point, fakeParent, relativePoint)
 	end
 	local offsetx = 0
 	local offsety = 0
@@ -2334,13 +2358,16 @@ function Tablet:Open(parent)
 			end
 		end
 	end
-	if type(parent) ~= "string" then
-		frame:SetPoint(point, parent, relativePoint, -offsetx, -offsety)
+	if type(fakeParent) ~= "string" then
+		frame:SetPoint(point, fakeParent, relativePoint, -offsetx, -offsety)
 	end
 
 	if detachedData and (info.cantAttach or detachedData.detached) and frame == tooltip then
 		detachedData.detached = false
 		frame:Detach()
+	end
+	if (not detachedData or not detachedData.detached) and GetMouseFocus() == fakeParent then
+		self.tooltip.enteredFrame = true
 	end
 end
 Tablet.Open = wrap(Tablet.Open, "Tablet:Open")
@@ -2471,6 +2498,16 @@ function Tablet:SetTitle(text)
 	currentTabletData:SetTitle(text)
 end
 Tablet.SetTitle = wrap(Tablet.SetTitle, "Tablet:SetTitle")
+
+function Tablet:SetTitleColor(r, g, b)
+	self:assert(currentFrame, "You must set title color within a registration")
+	self:assert(not currentCategoryInfo, "You cannot set title color in a category.")
+	self:argCheck(r, 2, "number")
+	self:argCheck(g, 3, "number")
+	self:argCheck(b, 4, "number")
+	currentTabletData:SetTitleColor(r, g, b)
+end
+Tablet.SetTitleColor = wrap(Tablet.SetTitleColor, "Tablet:SetTitleColor")
 
 function Tablet:GetNormalFontSize()
 	return normalSize

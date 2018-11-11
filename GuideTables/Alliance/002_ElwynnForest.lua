@@ -119,7 +119,7 @@ Table_002_ElwynnForest = {
 			[11] = { str = "Go to 74,47 and turn in #TURNIN“Continue to Stormwind”# accept #ACCEPT“Dungar Longdrink”#", x = 74, y = 47, zone = "Stormwind" },
 			[12] = { str = "Go to 51,12 and turn in #TURNIN“Elmore's Task”#  accept #ACCEPT“Stormpike's Delivery”# this will be done on the way to the Wetlands", x = 51, y = 12, zone = "Stormwind" },
 			[13] = { str = "Go to 78,45 and accept #ACCEPT“A Warrior’s Training”# or your classes level 10 quest.", x = 78, y = 45, zone = "Stormwind" },
-			[14] = { str = "Go to 66,62 and turn in #TURNIN“Stormpike's Delivery”# accept #ACCEPT#“Return to Lewis”# then fly back to Westfall", x = 66, y = 62, zone = "Stormwind" },
+			[14] = { str = "Go to 66,62 and turn in #TURNIN“Dungar Longdrink”# accept #ACCEPT#“Return to Lewis”# then fly back to Westfall", x = 66, y = 62, zone = "Stormwind" },
 			[15] = { str = "Go to the tower at 56,47 and turn in #TURNIN“Return to Lewis”#", x = 56, y = 47, zone = "Westfall" },
 			[16] = { str = "Fly back to SW #NPCWarrior:# Go in the bar at 74,37 and turn in #TURNIN“A Warrior’s Training”# accept #ACCEPT“Bartleby the Drunk”# then turn around and hand it in accept #ACCEPT“Beat Bartleby#", x = 74, y = 37, zone = "Stormwind" },
 			[17] = { str = "#NPCWarrior:# Kick bartleby’s ass then talk to him again and accept #ACCEPT“Bartleby's Mug”# then turn it in behind you and learn your defense" },

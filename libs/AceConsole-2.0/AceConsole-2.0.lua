@@ -1,6 +1,6 @@
 --[[
 Name: AceConsole-2.0
-Revision: $Rev: 16518 $
+Revision: $Rev: 17638 $
 Developed by: The Ace Development Team (http://www.wowace.com/index.php/The_Ace_Development_Team)
 Inspired By: Ace 1.x by Turan (turan@gryphon.com)
 Website: http://www.wowace.com/
@@ -13,11 +13,12 @@ Dependencies: AceLibrary, AceOO-2.0
 ]]
 
 local MAJOR_VERSION = "AceConsole-2.0"
-local MINOR_VERSION = "$Revision: 16518 $"
+local MINOR_VERSION = "$Revision: 17638 $"
 
 if not AceLibrary then error(MAJOR_VERSION .. " requires AceLibrary.") end
 if not AceLibrary:IsNewVersion(MAJOR_VERSION, MINOR_VERSION) then return end
 
+if loadstring("return function(...) return ... end") and AceLibrary:HasInstance(MAJOR_VERSION) then return end -- lua51 check
 if not AceLibrary:HasInstance("AceOO-2.0") then error(MAJOR_VERSION .. " requires AceOO-2.0.") end
 
 local MAP_ONOFF, USAGE, IS_CURRENTLY_SET_TO, IS_NOW_SET_TO, IS_NOT_A_VALID_OPTION_FOR, IS_NOT_A_VALID_VALUE_FOR, NO_OPTIONS_AVAILABLE, OPTION_HANDLER_NOT_FOUND, OPTION_HANDLER_NOT_VALID, OPTION_IS_DISABLED
