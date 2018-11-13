@@ -55,7 +55,7 @@ Table_002_ElwynnForest = {
 			[27] = { str = "Exit the Inn, turn in #TURNINReport to Goldshire# accept #ACCEPTThe Fargodeep Mine#" },
 			[28] = { str = "Find your trainer and buy new skills." },
 			[29] = { str = "Go near the carts at 42,67 and accept #ACCEPTGold Dust Exchange#", x = 42, y = 67, zone = "Elwynn Forest" },
-			[30] = { str = "Go south to the Fargodeep Mine at 39,82 and kill the kobold until you complete all 3 quests #DOQUESTThe Fargodeep Mine#, #DOQUESTGold Dust Exchange#, and #DOQUEATKobold Candles# Make sure you go in the lower entrance so The Fargodeep Mine is easier", x = 39, y = 82, zone = "Elwynn Forest" },
+			[30] = { str = "Go south to the Fargodeep Mine at 39,82 and kill the kobold until you complete all 3 quests #DOQUESTThe Fargodeep Mine#, #DOQUESTGold Dust Exchange#, and #DOQUESTKobold Candles# Make sure you go in the lower entrance so The Fargodeep Mine is easier", x = 39, y = 82, zone = "Elwynn Forest" },
 			[31] = { str = "Once all 3 are done go to the Stonefield Farm just up the hill east at 34,84 and accept #ACCEPTLost Necklace# SKIP #VIDEOPrincess Must Die!# if you cannot fight 3 mobs at a time.", x = 34, y = 84, zone = "Elwynn Forest" },
 			[32] = { str = "Go east to the Maclure Vinyard at 43,80 and accept #ACCEPTYoung Lovers#", x = 43, y = 80, zone = "Elwynn Forest" },
 			[33] = { str = "Go to 43,85 and turn in #TURNINLost Necklace# accept #ACCEPTPie For Billy# then kill boars until it’s finished.", x = 43, y = 85, zone = "Elwynn Forest" },
