@@ -3,17 +3,17 @@
 ------------------
 Frame_SettingsFrame.lua
 Authors: mrmr
-Version: 1.04.3
+Version: 1.05.1
 ------------------------------------------------------
-Description: 
-    	Settings Frame Object
-    1.00
+Description:
+		Settings Frame Object
+	1.00
 		-- Initial Ace2 release
 	1.99a
 		-- Ally addition starter version
-    1.03
+	1.03
 		-- No Changes. Just adjusting "version".
-    		1.99x for a beta release was a weird choise.
+			1.99x for a beta release was a weird choise.
 	1.04.1
 		-- Settings Frame object
 	1.04.2
@@ -21,6 +21,8 @@ Description:
 		(like the one for MetaMapBWP)
 	1.04.3
 		-- no changes in here for this revision
+	1.05.1
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -32,17 +34,19 @@ Dv(" VGuide Frame_SettingsFrame.lua Start")
 objSettingsFrame = {}
 objSettingsFrame.__index = objSettingsFrame
 
-function objSettingsFrame:new(fParent, tTexture, oSettings)	
+function objSettingsFrame:new(fParent, tTexture, oSettings)
 	fParent = fParent or nil
 	local obj = {}
-    setmetatable(obj, self)
+	setmetatable(obj, self)
 
-    local tCharInfo = oSettings:GetSettingsCharInfo()
-    local tUI = oSettings:GetSettingsUI()
-    --local tMetaMapBWP = oSettings:GetSettingsMetaMapBWP()
-    local tMetaMap = oSettings:GetSettingsMetaMap()
+	local tCharInfo = oSettings:GetSettingsCharInfo()
+	local tUI = oSettings:GetSettingsUI()
+	--local tMetaMapBWP = oSettings:GetSettingsMetaMapBWP()
+	local tMetaMap = oSettings:GetSettingsMetaMap()
 
-   	local bMinimapToggle = tUI.MinimapToggle
+	local bTomTomToggle = oSettings:GetSettingsTomTom()
+
+	local bMinimapToggle = tUI.MinimapToggle
 	local nMinimapPos = tUI.MinimapPos
 	local nStepScroll = tUI.StepScroll
 	local nOpacity = tUI.Opacity
@@ -67,7 +71,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		frame:SetScale(1)
 		frame:SetFrameStrata("TOOLTIP")
 		frame:SetWidth(220)
-		frame:SetHeight(315)
+		frame:SetHeight(335) --315
 		-- detach Setting frame from Main Frame, avoiding "scale" bug
 		--frame:SetPoint("TOPRIGHT", fParent, "TOPLEFT", -10, 0)
 		frame:SetPoint("CENTER", nil, "CENTER", 0, 0)
@@ -149,6 +153,28 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		end
 		return checkbutton
 	end
+	local function Render_SFTomTomSupportCheckBox(fParent, sName)
+		local checkbutton = CreateFrame("CheckButton", sName, fParent, "UICheckButtonTemplate")
+		checkbutton:SetWidth(20)
+		checkbutton:SetHeight(20)
+		getglobal(checkbutton:GetName() .. 'Text'):SetText("   TomTom Support")
+		
+		if TomTom ~= nil then
+			checkbutton:Enable()
+		else
+			checkbutton:Disable()
+		end
+		if checkbutton:IsEnabled() then
+			if bTomTomToggle then
+				checkbutton:SetChecked(true)
+			else
+				checkbutton:SetChecked(false)
+			end
+		else
+			checkbutton:SetChecked(false)
+		end
+		return checkbutton
+	end
 	local function Render_SFColorSwatch(fParent, sText, tUI)
 		local tCol = nil
 		if sText == "VG_MainFrame" then
@@ -182,7 +208,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		btn:SetScript( "OnClick", function()
 			local frame = getglobal(sText)
 			local tCol = nil
-			local opacitySlider = nil 
+			local opacitySlider = nil
 			if sText == "VG_MainFrame" then
 				tCol = tUI.MainFrameColor
 				opacitySlider = true
@@ -199,7 +225,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 				tCol = tUI.ScrollFrameTextColor
 				opacitySlider = false
 			end
-			
+
 			local r1, g1, b1, a1 = tCol.nR, tCol.nG, tCol.nB, tCol.nA
 			if ColorPickerFrame:IsShown() then
 				ColorPickerFrame:Hide()
@@ -218,7 +244,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 					r1, g1, b1, a1 = nr, ng, nb, na
 					btn.artwork:SetVertexColor(r1, g1, b1, a1)
 					--btn.background:SetVertexColor(r1, g1, b1, a1)
-					if sText == "VG_MainFrame" then 
+					if sText == "VG_MainFrame" then
 						frame:SetBackdropColor(r1, g1, b1, a1)
 						--VGuide.db.char.UIoptions.MainFrameColor = {
 						tUI.MainFrameColor = {
@@ -227,7 +253,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 						oSettings:SetSettingsUI(tUI)
 					elseif sText == "VG_MainFrame_StepFrame" then
 						frame:SetBackdropColor(r1, g1, b1, a1)
-						--VGuide.db.char.UIoptions.StepFrameColor = {						
+						--VGuide.db.char.UIoptions.StepFrameColor = {
 						tUI.StepFrameColor = {
 							nR = r1, nG = g1, nB = b1, nA = a1,
 						}
@@ -263,10 +289,10 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 				end
 				ColorPickerFrame.cancelFunc = ColorPickerFrame.func
 				ColorPickerFrame.opacityFunc = ColorPickerFrame.func
-				
+
 				ColorPickerFrame.hasOpacity = opacitySlider
 				ColorPickerFrame.opacity = 1 - a1
-				
+
 				ColorPickerFrame.previousValues = { r = r1, g = g1, b = b1, a = a1}
 
 				Dv(" -- r1: "..r1)
@@ -328,64 +354,66 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 	-------------------------------
 	do
 	-- Settings Frame
-		obj.tWidgets.frame_SettingFrame = Render_SF(fParent, "VG_SettingsFrame")
-		obj.tWidgets.button_CloseButton = Render_Button(obj.tWidgets.frame_SettingFrame, nil, 16, 16, tTexture.B_CLOSE)
-		obj.tWidgets.button_CloseButton:SetPoint("TOPRIGHT", obj.tWidgets.frame_SettingFrame, "TOPRIGHT", -5, -5)
-		obj.tWidgets.checkbutton_MetaMapNotesSupport = Render_SFMetamapNotesSupportCheckBox(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_MetaMapNotesCheckButton", tMetaMap)
-		obj.tWidgets.checkbutton_MetaMapNotesSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 8, -5)
-		obj.tWidgets.checkbutton_MetaMapBWPSupport = Render_SFMetamapBWPSupportCheckBox(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_MetaMapBWPCheckButton", tMetaMap)
-		obj.tWidgets.checkbutton_MetaMapBWPSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 8, -20)
-		--tWidgets.checkbutton_Minimap = Render_SFMinimapCheckBox(tWidgets.frame_SettingFrame, "VG_SettingsFrame_MinimapCheckButton")
-		--tWidgets.slider_Minimap = Render_SFSlider(tWidgets.frame_SettingFrame, "VG_SettingFrame_MinimapSlider", "Minimap Button Placement", "-180", "+180", -180, 180, math.floor(nMinimapPos), nil)
-		--tWidgets.slider_Minimap:SetPoint("TOP", tWidgets.frame_SettingFrame, "TOP", 0, -40)
+		obj.tWidgets.frame_SettingsFrame = Render_SF(fParent, "VG_SettingsFrame")
+		obj.tWidgets.button_CloseButton = Render_Button(obj.tWidgets.frame_SettingsFrame, nil, 16, 16, tTexture.B_CLOSE)
+		obj.tWidgets.button_CloseButton:SetPoint("TOPRIGHT", obj.tWidgets.frame_SettingsFrame, "TOPRIGHT", -5, -5)
+		obj.tWidgets.checkbutton_MetaMapNotesSupport = Render_SFMetamapNotesSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_MetaMapNotesCheckButton", tMetaMap)
+		obj.tWidgets.checkbutton_MetaMapNotesSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -5)
+		obj.tWidgets.checkbutton_MetaMapBWPSupport = Render_SFMetamapBWPSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_MetaMapBWPCheckButton", tMetaMap)
+		obj.tWidgets.checkbutton_MetaMapBWPSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -20)
+		--tWidgets.checkbutton_Minimap = Render_SFMinimapCheckBox(tWidgets.frame_SettingsFrame, "VG_SettingsFrame_MinimapCheckButton")
+		--tWidgets.slider_Minimap = Render_SFSlider(tWidgets.frame_SettingsFrame, "VG_SettingFrame_MinimapSlider", "Minimap Button Placement", "-180", "+180", -180, 180, math.floor(nMinimapPos), nil)
+		--tWidgets.slider_Minimap:SetPoint("TOP", tWidgets.frame_SettingsFrame, "TOP", 0, -40)
+		obj.tWidgets.checkbutton_TomTomSupport = Render_SFTomTomSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_TomTomCheckButton")
+		obj.tWidgets.checkbutton_TomTomSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -40)
 
-		obj.tWidgets.colorpicker_StepFrameTextColor = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame_StepFrameLabel", tUI)
-		obj.tWidgets.colorpicker_StepFrameTextColor:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -45)
+		obj.tWidgets.colorpicker_StepFrameTextColor = Render_SFColorSwatch(obj.tWidgets.frame_SettingsFrame, "VG_MainFrame_StepFrameLabel", tUI)
+		obj.tWidgets.colorpicker_StepFrameTextColor:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 10, -65) --45
 		obj.tWidgets.fs_ColorPickerStepFrameTextColor = Render_SFColorSwatchLabel(obj.tWidgets.colorpicker_StepFrameTextColor, "StepFrame TextColor")
-		
-		obj.tWidgets.colorpicker_ScrollFrameTextColor = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame_ScrollFrameLabels", tUI)
-		obj.tWidgets.colorpicker_ScrollFrameTextColor:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -63)
+
+		obj.tWidgets.colorpicker_ScrollFrameTextColor = Render_SFColorSwatch(obj.tWidgets.frame_SettingsFrame, "VG_MainFrame_ScrollFrameLabels", tUI)
+		obj.tWidgets.colorpicker_ScrollFrameTextColor:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 10, -83) --63
 		obj.tWidgets.fs_ColorPickerScrollFrameTextColor = Render_SFColorSwatchLabel(obj.tWidgets.colorpicker_ScrollFrameTextColor, "ScrollFrame TextColor")
-		
-		obj.tWidgets.colorpicker_MainFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame", tUI)
-		obj.tWidgets.colorpicker_MainFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -93)
+
+		obj.tWidgets.colorpicker_MainFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingsFrame, "VG_MainFrame", tUI)
+		obj.tWidgets.colorpicker_MainFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 10, -113) --93
 		obj.tWidgets.fs_ColorPickerMainFrame = Render_SFColorSwatchLabel(obj.tWidgets.colorpicker_MainFrame, "MainFrame Background")
 
-		obj.tWidgets.colorpicker_StepFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame_StepFrame", tUI)
-		obj.tWidgets.colorpicker_StepFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -110)
+		obj.tWidgets.colorpicker_StepFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingsFrame, "VG_MainFrame_StepFrame", tUI)
+		obj.tWidgets.colorpicker_StepFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 10, -130) --110
 		obj.tWidgets.fs_ColorPickerStepFrame = Render_SFColorSwatchLabel(obj.tWidgets.colorpicker_StepFrame , "StepFrame Tint")
 
-		obj.tWidgets.colorpicker_ScrollFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame_ScrollFrame", tUI)
-		obj.tWidgets.colorpicker_ScrollFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -127)
+		obj.tWidgets.colorpicker_ScrollFrame = Render_SFColorSwatch(obj.tWidgets.frame_SettingsFrame, "VG_MainFrame_ScrollFrame", tUI)
+		obj.tWidgets.colorpicker_ScrollFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 10, -147) --127
 		obj.tWidgets.fs_ColorPickerScrollFrame = Render_SFColorSwatchLabel(obj.tWidgets.colorpicker_ScrollFrame, "ScrollFrame Tint")
 
-		obj.tWidgets.slider_StepScroll = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_StepScrollSlider", "Value", "15%", "55%", 15, 55, math.floor(nStepScroll*100), "%")
-		obj.tWidgets.slider_StepScroll:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -160)
-		obj.tWidgets.slider_Opacity = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_OpacitySlider", "Opacity", "15%", "100%", 15, 100, math.floor(nOpacity*100), "%")
-		obj.tWidgets.slider_Opacity:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -200)
-		obj.tWidgets.slider_Scale = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_ScaleSlider", "Scale", "25%", "175%", 25, 175, math.floor(nScale*100), "%")
-		obj.tWidgets.slider_Scale:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -240)
-		obj.tWidgets.slider_Layer = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_LayerSlider", "Layer", "BG", "DIALOG", 1, 5, Layers[sLayer], sLayer)
-		obj.tWidgets.slider_Layer:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -280)
+		obj.tWidgets.slider_StepScroll = Render_SFSlider(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_StepScrollSlider", "Value", "15%", "55%", 15, 55, math.floor(nStepScroll*100), "%")
+		obj.tWidgets.slider_StepScroll:SetPoint("TOP", obj.tWidgets.frame_SettingsFrame, "TOP", 0, -180) --160
+		obj.tWidgets.slider_Opacity = Render_SFSlider(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_OpacitySlider", "Opacity", "15%", "100%", 15, 100, math.floor(nOpacity*100), "%")
+		obj.tWidgets.slider_Opacity:SetPoint("TOP", obj.tWidgets.frame_SettingsFrame, "TOP", 0, -220) --200
+		obj.tWidgets.slider_Scale = Render_SFSlider(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_ScaleSlider", "Scale", "25%", "175%", 25, 175, math.floor(nScale*100), "%")
+		obj.tWidgets.slider_Scale:SetPoint("TOP", obj.tWidgets.frame_SettingsFrame, "TOP", 0, -260) --240
+		obj.tWidgets.slider_Layer = Render_SFSlider(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_LayerSlider", "Layer", "BG", "DIALOG", 1, 5, Layers[sLayer], sLayer)
+		obj.tWidgets.slider_Layer:SetPoint("TOP", obj.tWidgets.frame_SettingsFrame, "TOP", 0, -300) --280
 		obj.tWidgets.slider_Layer.fs:SetText(sLayer)
 	end
 
 	-------------------------------
 	--- UI Events Handling
 	-------------------------------
-	obj.tWidgets.frame_SettingFrame:SetScript("OnMouseDown", function()
+	obj.tWidgets.frame_SettingsFrame:SetScript("OnMouseDown", function()
 		if arg1 == "LeftButton" and not this.isMoving then
 			this:StartMoving();
 			this.isMoving = true;
 		end
 	end)
-	obj.tWidgets.frame_SettingFrame:SetScript("OnMouseUp", function()
+	obj.tWidgets.frame_SettingsFrame:SetScript("OnMouseUp", function()
 		if arg1 == "LeftButton" and this.isMoving then
 			this:StopMovingOrSizing();
 			this.isMoving = false;
 		end
 	end)
-	obj.tWidgets.frame_SettingFrame:SetScript("OnHide", function()
+	obj.tWidgets.frame_SettingsFrame:SetScript("OnHide", function()
 		if this.isMoving then
 			this:StopMovingOrSizing();
 			this.isMoving = false;
@@ -418,6 +446,11 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 				tMetaMap.BWPEnable = true
 			end
 			oSettings:SetSettingsMetaMap(tMetaMap)
+		end
+	end)
+	obj.tWidgets.checkbutton_TomTomSupport:SetScript("OnClick", function()
+		if arg1 == "LeftButton" then
+			oSettings:SetSettingsTomTom(this:GetChecked())
 		end
 	end)
 	--[[obj.tWidgets.checkbutton_Minimap:SetScript("OnClick", function()
@@ -507,9 +540,9 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 	-------------------------------
 	--- Initialization
 	-------------------------------
-	obj.tWidgets.frame_SettingFrame:Hide()
-	--obj.tWidgets.frame_SettingFrame:Show()
-	
+	obj.tWidgets.frame_SettingsFrame:Hide()
+	--obj.tWidgets.frame_SettingsFrame:Show()
+
 	obj.ShowFrame = function(self)
 		local f = obj.tWidgets.frame_SettingsFrame
 		if not f:IsVisible() then
@@ -524,7 +557,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		end
 	end
 
-    return obj
+	return obj
 end
 
 Dv(" VGuide Frame_SettingsFrame.lua End")

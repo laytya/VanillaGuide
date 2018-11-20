@@ -5,17 +5,17 @@ GuideTable.lua
 Authors: mrmr
 Version: 1.04.3
 ------------------------------------------------------
-Description: 
-    	Object Handling the Guides
-    1.00
+Description:
+		Object Handling the Guides
+	1.00
 		-- Initial Ace2 release
 	1.99a
 		-- Ally addition starter version
-    1.03
+	1.03
 		-- No Changes. Just adjusting "version".
-    		1.99x for a beta release was a weird choise.
+			1.99x for a beta release was a weird choise.
 	1.04.1
-		-- This will be the place where we "prepare" the guides, 
+		-- This will be the place where we "prepare" the guides,
 			upon player login.
 			We'll include all the needed guides here and we'll provide
 			function to retrive informations too
@@ -35,7 +35,7 @@ objGuideTable.__index = objGuideTable
 
 function objGuideTable:new(oSettings)
 	local obj = {}
-    setmetatable(obj, self)
+	setmetatable(obj, self)
 
 	local function TablesMerge(t1, t2)
 	    for k, v in pairs(t2) do
@@ -83,7 +83,7 @@ function objGuideTable:new(oSettings)
 								["replace"] = "|c00fca742"
 							},
 							[8] = {
-								["find"] = "#HUNTER", 
+								["find"] = "#HUNTER",
 								["replace"] = "|c00a80000"
 							},
 						}
@@ -148,7 +148,7 @@ function objGuideTable:new(oSettings)
 			["Undeads"] = {
 				{ "v", "1-6 DeathKnell", id = nil },
 				{ "v", "6-10 Tirisfal Glades", id = nil },
-				{ "v", "10-12 Tirisfal Glades", id = nil },          
+				{ "v", "10-12 Tirisfal Glades", id = nil },
 			},
 			["[H] 12-20"] = {
 				{ "v", "12-15 Barrens", id = nil },
@@ -307,11 +307,11 @@ function objGuideTable:new(oSettings)
 	-- Guides Praparation methods
 	obj.PrepareGuidesTableHorde = function(self, tRace)
 		obj.Guide = TablesMerge(obj.Guide, ColorizeTable(Table_001_Introduction))
-		if tRace == "Tauren" then 
+		if tRace == "Tauren" then
 			obj.Guide = TablesMerge(obj.Guide, ColorizeTable(Table_002_Mulgore))
-		elseif tRace == "Undead" then 
+		elseif tRace == "Undead" then
 			obj.Guide = TablesMerge(obj.Guide, ColorizeTable(Table_002_TirisfalGlades))
-		else 
+		else
 			obj.Guide = TablesMerge(obj.Guide, ColorizeTable(Table_002_Durotar))
 		end
 		obj.Guide = TablesMerge(obj.Guide, ColorizeTable(Table_003_Horde_12to20))
@@ -323,17 +323,17 @@ function objGuideTable:new(oSettings)
 	end
 
 	obj.PrepareNoGuidesTableHorde = function(self, tRace)
-		-- we normilize here, cause "indexes" will clash otherwise 
-		if tRace == "Tauren" then 
+		-- we normilize here, cause "indexes" will clash otherwise
+		if tRace == "Tauren" then
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_TirisfalGlades))
 			obj:NormalizeGuide(obj.NoGuide, nil)
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_Durotar))
-		elseif tRace == "Undead" then 
+		elseif tRace == "Undead" then
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_Durotar))
 			obj:NormalizeGuide(obj.NoGuide, nil)
-			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_Mulgore))			
+			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_Mulgore))
 		else
-			
+
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_Mulgore))
 			obj:NormalizeGuide(obj.NoGuide, nil)
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_TirisfalGlades))
@@ -358,7 +358,7 @@ function objGuideTable:new(oSettings)
 	end
 
 	obj.PrepareNoGuidesTableAlliance = function(self, tRace)
-		-- we normilize here, cause "indexes" will clash otherwise 
+		-- we normilize here, cause "indexes" will clash otherwise
 		if tRace == "Human" then
 			obj.NoGuide = TablesMerge(obj.NoGuide, ColorizeTable(Table_002_DunMorogh))
 			obj:NormalizeGuide(obj.NoGuide, nil)
@@ -406,13 +406,13 @@ function objGuideTable:new(oSettings)
 			for k,v2 in ipairs(obj.Guide) do
 				-- we use the "plain" method here, as in those "title" string
 				-- we could find special characters like "-" and "["
-				if string.find(v2.title, v1[2], 1, true) then 
+				if string.find(v2.title, v1[2], 1, true) then
 					v1.id = k
 				end
 			end
 		end
 	end
-	
+
 	obj.DefineDDMProfessionsSubMenu = function(self)
 		xSearchID(obj.TableDDM.lvl2["Profession Guides"])
 	end
@@ -469,7 +469,7 @@ function objGuideTable:new(oSettings)
 
 	-- Query object methods
 	obj.GetGuide = function(self, nGuideID)
-		if nGuideID > obj.GuideCount then 
+		if nGuideID > obj.GuideCount then
 			Dv(" -- Guide not present! ID exceed the GuideCount value!")
 		elseif nGuideID < 1 then
 			Dv(" -- negative or zero ID! Are you joking?")
@@ -490,11 +490,11 @@ function objGuideTable:new(oSettings)
 		obj:PrepareGuidesTableAlliance(obj.Race)
 		obj:PrepareNoGuidesTableAlliance(obj.Race)
 	end
-	
+
 	-- we use a HUGE offset here, so we know those NoGuide will end up at the end!
 	obj.NoGuide, obj.NoGuideCount = obj:NormalizeGuide(obj.NoGuide, 100500)
 	obj.Guide = TablesMerge(obj.Guide, obj.NoGuide)
-	
+
 	obj.Guide, obj.GuideCount = obj:NormalizeGuide(obj.Guide, nil)
 
 	obj:DefineDDMProfessionsSubMenu()
@@ -531,11 +531,11 @@ do
 		[0610] = {	title = "6-10 Tirisfal Glades" },
 		[1012] = {	title = "10-12 Tirisfal Glades" },
 	}
------------------------------------------------------------------	
+-----------------------------------------------------------------
 	Table_002_DunMorogh = {
 		[0106] = {	title = "1-6 Cold Ridge Valley" },
-        [0612] = {	title = "6-12 Dun Morogh" },
-    }
+		[0612] = {	title = "6-12 Dun Morogh" },
+	}
 	Table_002_Teldrassil = {
 		[0106] = {	title = "1-6 Teldrassil" },
 		[0612] = {	title = "6-12 Teldrassil" },
@@ -617,14 +617,14 @@ do
 	}
 	Table_003_Alliance_20to30 = {
 		[2021] = {  title = "20-21 Darkshore" },
-        [2122] = {  title = "21-22 Ashenvale" },
-        [2223] = {  title = "22-23 Stonetalon Mountains" },
-        [2324] = {  title = "23-24 Darkshore" },
-        [2425] = {  title = "24-25 Ashenvale" },
-        [2526] = {  title = "25-27 Wetlands" },
-        [2728] = {  title = "27-28 Lakeshire" },
-        [2829] = {  title = "28-29 Duskwood" },
-        [2930] = {	title = "29-30 Ashenvale" },
+		[2122] = {  title = "21-22 Ashenvale" },
+		[2223] = {  title = "22-23 Stonetalon Mountains" },
+		[2324] = {  title = "23-24 Darkshore" },
+		[2425] = {  title = "24-25 Ashenvale" },
+		[2526] = {  title = "25-27 Wetlands" },
+		[2728] = {  title = "27-28 Lakeshire" },
+		[2829] = {  title = "28-29 Duskwood" },
+		[2930] = {	title = "29-30 Ashenvale" },
 		[3030] = {  title = "30-30 Wetlands" },
 	}
 	Table_003_Alliance_30to40 = {

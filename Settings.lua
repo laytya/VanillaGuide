@@ -3,17 +3,17 @@
 ------------------
 Settings.lua
 Authors: mrmr
-Version: 1.04.3
+Version: 1.05.1
 ------------------------------------------------------
-Description: 
-    	This object handles the various addon settings
-    1.00
+Description:
+		This object handles the various addon settings
+	1.00
 		-- Initial Ace2 release
 	1.99a
 		-- Ally addition starter version
-    1.03
+	1.03
 		-- No Changes. Just adjusting "version".
-    		1.99x for a beta release was a weird choise.
+			1.99x for a beta release was a weird choise.
 	1.04.1
 		-- Settings and/or "Saved Variables" are inclosed in
 			VGuide.Settings
@@ -24,6 +24,8 @@ Description:
 			MetaMapBWPSupportCheck()
 	1.04.3
 		-- no changes in here for this revision
+	1.05.1
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -36,7 +38,7 @@ objSettings.__index = objSettings
 
 function objSettings:new()
 	local obj = {}
-    setmetatable(obj, self)
+	setmetatable(obj, self)
 
 	local profile_defaults = {}
 	local char_defaults = {
@@ -115,15 +117,16 @@ function objSettings:new()
 			NotesEnable = false,
 			BWPEnable = false,
 		},
+		TomTomToggle = false,
 	}
 
 	obj = AceLibrary("AceAddon-2.0"):new("AceDB-2.0")
 
 	obj:RegisterDB("VanillaGuideDB", "VanillaGuideDBPC")
-	
+
 	obj:RegisterDefaults("profile", profile_defaults)
 	obj:RegisterDefaults("char", char_defaults)
-	
+
 	obj.PrintSettings = function(self)
 		Dv("---------------------------")
 		Dv(" -- CharInfo")
@@ -137,6 +140,10 @@ function objSettings:new()
 		Dv(" -  - BWPPresence: " .. tostring(obj.db.char.MetaMap.BWPPresence))
 		Dv(" -  - Notes: " .. tostring(obj.db.char.MetaMap.NotesEnable))
 		Dv(" -  - BWP: " .. tostring(obj.db.char.MetaMap.BWPEnable))
+		Dv(" ------------------")
+		Dv(" -- TomTom")
+		Dv(" -  - Presence: " .. tostring(IsAddOnLoaded("TomTom")))
+		Dv(" -  - Enabled: " .. tostring(obj.db.char.TomTomToggle))
 		Dv(" ------------------")
 		Dv(" -- GuideValues")
 		Dv(" -  - GuideID: " .. tostring(obj.db.char.GuideValues.GuideID))
@@ -153,7 +160,7 @@ function objSettings:new()
 			local MetaMapPresence, MetaMapNotesPresence, MetaMapBWPPresence
 			Dv("    MetaMap Support Check:")
 			-- control THESE TOO, although they're part of the WoW API
-			-- GetZoneText, GetRealZoneText, GetSubZoneText, GetMinimapZoneText. 
+			-- GetZoneText, GetRealZoneText, GetSubZoneText, GetMinimapZoneText.
 
 			-- MetaMap Support Check
 			if IsAddOnLoaded("MetaMap") then
@@ -164,7 +171,7 @@ function objSettings:new()
 					if MetaMapNotes_AddNewNote then
 						Di("      - MetaMapNotes Support Present")
 						MetaMapNotesPresence = true
-					else 
+					else
 						Di("      - MetaMapNotes Support not Present - no markers on your WorldMap")
 						MetaMapNotesPresence = false
 					end
@@ -222,8 +229,8 @@ function objSettings:new()
 			end
 		end
 
-		obj.db.char.MetaMap.Presence, 
-		obj.db.char.MetaMap.NotesPresence,	
+		obj.db.char.MetaMap.Presence,
+		obj.db.char.MetaMap.NotesPresence,
 		obj.db.char.MetaMap.BWPPresence = MetaMapBWPSupportCheck()
 	end
 
@@ -245,6 +252,10 @@ function objSettings:new()
 
 	obj.GetSettingsMetaMap = function(self)
 		return obj.db.char.MetaMap
+	end
+
+	obj.GetSettingsTomTom = function(self)
+		return obj.db.char.TomTomToggle
 	end
 
 	obj.GetSettingsEntireCharDB = function(self)
@@ -269,6 +280,10 @@ function objSettings:new()
 
 	obj.SetSettingsMetaMap = function(self, tMetaMap)
 		obj.db.char.MetaMap = tMetaMap
+	end
+
+	obj.SetSettingsTomTom = function(self, bTomTom)
+		obj.db.char.TomTomToggle = bTomTom
 	end
 
 	obj.SetSettingEntireCharDB = function(self, tSettingsTable)

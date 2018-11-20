@@ -3,17 +3,17 @@
 ------------------
 Frame_MainFrame.lua
 Authors: mrmr
-Version: 1.04.3
+Version: 1.05.1
 ------------------------------------------------------
-Description: 
-    	Main Frame Object
-    1.00
+Description:
+		Main Frame Object
+	1.00
 		-- Initial Ace2 release
 	1.99a
 		-- Ally addition starter version
-    1.03
+	1.03
 		-- No Changes. Just adjusting "version".
-    		1.99x for a beta release was a weird choise.
+			1.99x for a beta release was a weird choise.
 	1.04.1
 		-- Main Frame object
 	1.04.2
@@ -22,10 +22,12 @@ Description:
 			Now, the methods are called:
 		obj.RefreshMetaMap()
 		obj.SetMetaMapDestination(self, nX, nY, sZone, title, step, label, mode)
-			Diffentes modes, produces different behaviour, 
+			Diffentes modes, produces different behaviour,
 			see the source for insight
 	1.04.3
 		-- no changes in here for this revision
+	1.05.1
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -39,9 +41,9 @@ objMainFrame.__index = objMainFrame
 function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 	fParent = fParent or nil
 	local obj = {}
-    setmetatable(obj, self)
+	setmetatable(obj, self)
 
-    local tUI = oSettings:GetSettingsUI()
+	local tUI = oSettings:GetSettingsUI()
 
 	local function Render_MF(fParent, sName, tTexture, tUI)
 		local bLocked = tUI.Locked
@@ -83,7 +85,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 
 			local bottomStep = fStep:GetBottom()
 			local topScroll = fScroll:GetTop()
-			
+
 			if arg1 == "LeftButton" and not this.isMoving and not this.isResizing and not bLocked then
 				if (x < left + 5 and y < bottom + 5) then
 					this:StartSizing("BOTTOMLEFT")
@@ -109,7 +111,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 				elseif (y > top - 5) then
 					this:StartSizing("TOP")
 					this.isResizing = true
-				elseif StepFrame and ScrollFrame and 
+				elseif StepFrame and ScrollFrame and
 				  (x > left + 5 and y > topScroll and y < bottomStep and x < right +5) then
 					local nH = this:GetHeight()
 					local nGapMin = nH * 0.85 - (nH /2)
@@ -193,7 +195,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			end
 		end)
 		return frame
-    end
+	end
 	local function Render_MFTitle(fParent, sName)
 		local version = GetAddOnMetadata("VanillaGuide", "Version")
 		local fs = fParent:CreateFontString(sName, "ARTWORK", "GameFontNormalSmall")
@@ -203,8 +205,8 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		fs:SetJustifyV("CENTER")
 		fs:SetText("|cccff1919Vanilla|ccceeeeeeGuide |ccca1a1a1v|ccc4a4aa1" .. version .. "|r")
 		return fs
-    end
-    local function Render_Button(fParent, sName, nWidth, nHeight, tTexture)
+	end
+	local function Render_Button(fParent, sName, nWidth, nHeight, tTexture)
 		local btn = CreateFrame("Button", sName, fParent)
 		btn:SetWidth(nWidth)
 		btn:SetHeight(nHeight)
@@ -213,24 +215,24 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		btn:SetHighlightTexture(tTexture.HIGHLIGHT)
 		btn:RegisterForClicks("LeftButtonUp")
 		return btn
-    end
-    local function Render_MFStepNumberFrame(fParent, sName, nWidth, nHeight, tTexture)
+	end
+	local function Render_MFStepNumberFrame(fParent, sName, nWidth, nHeight, tTexture)
 		local frame = CreateFrame("Frame", sName, fParent)
 		frame:SetWidth(nWidth)
 		frame:SetHeight(nHeight)
 		frame:SetBackdrop(tTexture.BACKDROP)
 		frame:SetBackdropColor(.1, .1, .1, .9)
 		return frame
-    end
-    local function Render_MFStepNumberLabel(fParent, sName)
+	end
+	local function Render_MFStepNumberLabel(fParent, sName)
 		local fs = fParent:CreateFontString(sName, "ARTWORK", "GameFontNormalSmall")
 		fs:SetPoint("CENTER", fParent, "CENTER", 0, 0)
 		fs:SetTextColor(.71, .71, .71, 1)
 		fs:SetJustifyH("CENTER")
 		fs:SetJustifyV("CENTER")
 		return fs
-    end
-    local function Render_MFDropDownMenu(fParent, sName)
+	end
+	local function Render_MFDropDownMenu(fParent, sName)
 		local frame= CreateFrame("Frame", sName, fParent)
 		frame.UncheckHack = function()
 		  getglobal(this:GetName().."Check"):Hide()
@@ -240,15 +242,15 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 
 		frame:SetHeight(25)
 		frame:SetWidth(25)
-    	return frame
-    end
-    local function Render_MFDropDownMenuZoneFrame(fParent, sName, tTexture)
+		return frame
+	end
+	local function Render_MFDropDownMenuZoneFrame(fParent, sName, tTexture)
 		local frame = CreateFrame("Frame", sName, fParent)
 		frame:SetBackdrop(tTexture.BACKDROP);
 		frame:SetBackdropColor(.1, .1, .1, .7)
 		return frame
-    end
-    local function Render_MFDropDownMenuZoneLabel(fParent, sName)
+	end
+	local function Render_MFDropDownMenuZoneLabel(fParent, sName)
 		local fs = fParent:CreateFontString(sName, "ARTWORK", "GameFontNormalSmall")
 		fs:SetTextColor(.91, .91, .91, 1)
 		fs:SetJustifyH("CENTER")
@@ -275,8 +277,8 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			end
 		end)
 		return frame
-    end
-    local function Render_MFStepLabel(fParent, sName, tUI)
+	end
+	local function Render_MFStepLabel(fParent, sName, tUI)
 		local tColor = tUI.StepFrameTextColor
 		local fs = fParent:CreateFontString(sName, "ARTWORK", "GameFontNormalSmall")
 		fs:SetPoint("TOPLEFT", fParent, "TOPLEFT", 5, -5)
@@ -285,9 +287,9 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		fs:SetJustifyH("LEFT")
 		fs:SetJustifyV("TOP")
 		return fs
-    end
+	end
 
-    local function Render_MFScrollFrame(fParent, sName, tTexture, tUI)
+	local function Render_MFScrollFrame(fParent, sName, tTexture, tUI)
 		local tColor = tUI.ScrollFrameColor
 		local frame = CreateFrame("ScrollFrame", sName, fParent)
 		frame:SetBackdrop(tTexture.BACKDROP)
@@ -313,17 +315,17 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			end
 		end)
 		return frame
-    end
+	end
 
-    local function Render_MFScrollFrameChild(fParent, sName)
+	local function Render_MFScrollFrameChild(fParent, sName)
 		local nScrollFrameChildWidth = fParent:GetWidth() - 10
 		local nScrollFrameChildHeight = fParent:GetHeight() - 10
 		local frame = CreateFrame("Frame", sName, fParent)
 		frame:SetWidth(nScrollFrameChildWidth)
 		frame:SetHeight(nScrollFrameChildHeight)
 		return frame
-    end
-    local function Render_MFScrollFrameSlider(fParent, sName)
+	end
+	local function Render_MFScrollFrameSlider(fParent, sName)
 		local sld = CreateFrame("Slider", sName, fParent)
 		sld.background = sld:CreateTexture(nil, "BACKGROUND")
 		sld.background:SetAllPoints(true)
@@ -342,9 +344,9 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			fScroll:SetVerticalScroll(arg1)
 		end)
 		return sld
-    end
+	end
 
-    local function ChangeView(tUI)
+	local function ChangeView(tUI)
 		local fMain = getglobal("VG_MainFrame")
 		local fStep = getglobal("VG_MainFrame_StepFrame")
 		local fScroll = getglobal("VG_MainFrame_ScrollFrame")
@@ -378,13 +380,13 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			fStep:Show()
 			fScroll:Show()
 		end
-    end
+	end
 
 	obj.tWidgets = {}
-    -------------------------------
-    --- Rendering
-    -------------------------------
-    --do
+	-------------------------------
+	--- Rendering
+	-------------------------------
+	--do
 	-- Addon Main Frame and Title
 		obj.tWidgets.frame_MainFrame = Render_MF(nil, "VG_MainFrame", tTexture, tUI)
 		obj.tWidgets.frame_MainFrame.isMoving = nil
@@ -397,7 +399,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		obj.tWidgets.button_SettingsButton:SetPoint("BOTTOMRIGHT", obj.tWidgets.frame_MainFrame, "BOTTOMRIGHT", -6, 5)
 		obj.tWidgets.button_AboutButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 20, 20, tTexture.B_ABOUT)
 		obj.tWidgets.button_AboutButton:SetPoint("BOTTOMRIGHT", obj.tWidgets.frame_MainFrame, "BOTTOMRIGHT", -27, 5)
-   	-- Lock Button
+	-- Lock Button
 		if tUI.Locked then
 			obj.tWidgets.button_LockButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 16, 16, tTexture.B_LOCKED)
 		else
@@ -407,7 +409,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 	-- ChangeView Button
 		obj.tWidgets.button_ChangeViewButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 16, 16, tTexture.B_FLASH)
 		obj.tWidgets.button_ChangeViewButton:SetPoint("TOPRIGHT", obj.tWidgets.frame_MainFrame, "TOPRIGHT", -105, -5)
-    -- Prev and Next Guide Buttons
+	-- Prev and Next Guide Buttons
 		obj.tWidgets.button_PrevGuideButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 25, 16, tTexture.B_DOUBLEARROWLEFT)
 		obj.tWidgets.button_PrevGuideButton:SetPoint("BOTTOMRIGHT", obj.tWidgets.frame_MainFrame, "BOTTOMRIGHT", -75, 7)
 		obj.tWidgets.button_NextGuideButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 25, 16, tTexture.B_DOUBLEARROWRIGHT)
@@ -423,7 +425,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		obj.tWidgets.frame_DropDownMenuZoneFrame:SetPoint("TOPLEFT", obj.tWidgets.frame_DropDownMenu, "TOPLEFT", 5, -2)
 		obj.tWidgets.frame_DropDownMenuZoneFrame:SetPoint("BOTTOMRIGHT", obj.tWidgets.button_PrevGuideButton, "LEFT", -5, -10)
 		obj.tWidgets.fs_DropDownMenuZone = Render_MFDropDownMenuZoneLabel(obj.tWidgets.frame_DropDownMenuZoneFrame, "VG_MainFrame_DropDownMenuLabel")
-    -- Pren and Next Step Buttons
+	-- Pren and Next Step Buttons
 		obj.tWidgets.button_PrevStepButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 25, 16, tTexture.B_DOUBLEARROWLEFT)
 		obj.tWidgets.button_PrevStepButton:SetPoint("TOPRIGHT", obj.tWidgets.frame_MainFrame, "TOPRIGHT", -76, -5)
 		obj.tWidgets.button_NextStepButton = Render_Button(obj.tWidgets.frame_MainFrame, nil, 25, 16, tTexture.B_DOUBLEARROWRIGHT)
@@ -459,10 +461,10 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 	--end
 
 	-------------------------------
-    --- UI Events Handling
-    -------------------------------
+	--- UI Events Handling
+	-------------------------------
 	do
-    -- Close Button
+	-- Close Button
 		obj.tWidgets.button_CloseButton:SetScript("OnClick", function()
 			local fMain = getglobal("VG_MainFrame")
 			local fSettings = getglobal("VG_SettingsFrame")
@@ -566,7 +568,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 	end
 
 	-------------------------------
-	--- External Methods 
+	--- External Methods
 	-------------------------------
 
 	obj.RefreshStepFrameLabel = function(self)
@@ -591,10 +593,10 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		local UI = oSettings:GetSettingsUI()
 		local tColF = UI.StepFrameColor
 		local tColT = UI.ScrollFrameTextColor
-		
+
 		local sfc = obj.tWidgets.frame_ScrollFrameChild
 		sfc:Hide()
-		
+
 		t = {}
 		for k,_ in ipairs(tEntries) do
 			local sh
@@ -696,13 +698,13 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		scrollFrameWidth = scrollFrameWidth * (1/s)
 
 		obj:ScrollFrameChildEntriesHide()
-		
+
 		local t = {}
 		t = oDisplay:GetScrollFrameDisplay()
 		fChild.Entries = obj:ScrollFrameChildEntriesCreate(t)
 
 		-- inside t we've the "lenght" of the rendered string
-		-- We need this to get how many lines there are in every 
+		-- We need this to get how many lines there are in every
 		-- ScrollFrameChildEntries entity
 		local totalHeight = 0
 		totalHeight, t = ScrollFrameChildHeight(tTexture, scrollFrameWidth, t)
@@ -770,23 +772,22 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		-- 1 = Notes Enabled
 		-- 2 = BWP Enabled
 		-- 3 = Notes & BWP Enabled
-		local mode
 		if tMetaMap.Presence then
 			local mode
-			if (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and 
+			if (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and
 					not (tMetaMap.BWPPresence and tMetaMap.BWPEnable) then
 				mode = 1
-			elseif not (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and 
+			elseif not (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and
 					(tMetaMap.BWPPresence and tMetaMap.BWPEnable) then
-				mode = 2	
-			elseif (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and 
+				mode = 2
+			elseif (tMetaMap.NotesPresence and tMetaMap.NotesEnable) and
 					(tMetaMap.BWPPresence and tMetaMap.BWPEnable) then
 				mode = 3
-			else 
+			else
 				mode = nil
 			end
-		
-			local title = oDisplay:GetGuideTitle() 
+
+			local title = oDisplay:GetGuideTitle()
 			local step = oDisplay:GetCurrentStep()
 			local label = oDisplay:GetStepLabel()
 			local t = oDisplay:GetCurrentStepInfo()
@@ -794,6 +795,24 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		end
 	end
 
+	local waypoint = nil
+	obj.RefreshTomTom = function(self)
+		if TomTom and oSettings:GetSettingsTomTom() then
+			local t = oDisplay:GetCurrentStepInfo()
+			if t.x and t.y and t.zone then
+				local continent, zone = TomTom:GetZoneInfo(TomTom:CleanZoneName(t.zone))
+				local options = { title = string.format("[VG] %s (step %d/%d)", oDisplay:GetGuideTitle(), oDisplay:GetCurrentStep(), oDisplay:GetCurrentStepCount()) }
+				if waypoint ~= nil then
+					TomTom:RemoveWaypoint(waypoint)
+				end
+				waypoint = TomTom:AddMFWaypoint(continent, zone, t.x/100, t.y/100, options )
+			else
+				TomTom:GoToNextWayPoint(waypoint)
+				waypoint = nil
+			end
+		end
+	end
+	
 	obj.RefreshData = function(self)
 		obj:RefreshStepFrameLabel()
 		obj:RefreshStepNumberFrameLabel()
@@ -801,36 +820,37 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		obj:RefreshDropDownMenuLabel()
 		obj:RefreshScrollFrame()
 		obj:RefreshMetaMap()
+		obj:RefreshTomTom()
 	end
 
 	local function AddToDDM(nLevel, sType, sLabel, nID)
 		local info = {}
 		info.isTitle = false
-		
+
 		info.keepShownOnClick = false
 		info.disabled = nil
-		
+
 		info.notCheckable = true --1?
 
 		info.text = sLabel
 		info.value = sLabel
-    	info.arg1 = nID
-    	info.arg2 = sLabel
-    	if sType == "s" then
-    		info.hasArrow = true
+		info.arg1 = nID
+		info.arg2 = sLabel
+		if sType == "s" then
+			info.hasArrow = true
 			info.func = this.UncheckHack
 		else
 			info.hasArrow = false --nil?
 			info.func = function(arg1, arg2)
 				oDisplay:GuideByID(arg1)
 				obj:RefreshData()
-          		CloseDropDownMenus()
+				CloseDropDownMenus()
 			end
 		end
 		UIDropDownMenu_AddButton(info, nLevel)
 	end
 
-	local function DropDown_Init(level)		
+	local function DropDown_Init(level)
 		local tDDM = oDisplay:RetriveTableDDM()
 		local tCharInfo = oSettings:GetSettingsCharInfo()
 		local info = {}
@@ -916,11 +936,11 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 			end
 			if mode == 1 or mode == 3 then
 				if sZone == mapName then
-					-- function MetaMapNotes_AddNewNote(continent, zone, 
-					--		xPos, yPos, 
-					--		name, inf1, inf2, 
-					--		creator, 
-					--		icon, 
+					-- function MetaMapNotes_AddNewNote(continent, zone,
+					--		xPos, yPos,
+					--		name, inf1, inf2,
+					--		creator,
+					--		icon,
 					--		ncol, in1c, in2c, mininote)
 					--
 					-- Colors
@@ -939,24 +959,24 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 					--    0 - MapNote only
 					--    1 - MapNote & mininote
 					--    2 - mininote only
-					MetaMapNotes_AddNewNote(continent, zone, normX, normY, 
+					MetaMapNotes_AddNewNote(continent, zone, normX, normY,
 						"VG: Step[" .. step .. "] " .. title,
 						mapName, label, "VanillaGuide", 6, 6, 9, 8, 1)
 				end
 			end
 		else
-			if BWP_ClearDest then 
-				BWP_ClearDest() 
+			if BWP_ClearDest then
+				BWP_ClearDest()
 				local frame = getglobal("BWP_DisplayFrame")
 				frame:Hide()
 			end
 		end
 	end
-	
+
 	-------------------------------
-    --- Initialization
-    -------------------------------
-    do
+	--- Initialization
+	-------------------------------
+	do
 		ChangeView(tUI)
 		obj:InitializeDDM()
 		obj.tWidgets.frame_ScrollFrame:SetScrollChild(obj.tWidgets.frame_ScrollFrameChild)
@@ -964,9 +984,9 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		obj.tWidgets.frame_MainFrame:SetAlpha(tUI.Opacity)
 		obj.tWidgets.frame_MainFrame:SetScale(tUI.Scale)
 		obj.tWidgets.frame_MainFrame:SetFrameStrata(tUI.Layer)
-    end
+	end
 
-    return obj
+	return obj
 end
 
 Dv(" VGuide Frame_MainFrame.lua End")

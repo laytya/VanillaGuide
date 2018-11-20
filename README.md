@@ -2,9 +2,10 @@ VanillaGuide
 ============
 VanillaGuide aim to cover the hole for an in-game guide for Vanilla WoW. The AddOn features:
 
-    Step-by-Step Zone Guides (from Joana and Brian Kopps work)
-    Hints and Tips for various Quests
-    MetaMapBWP Integration
+* Step-by-Step Zone Guides (from Joana and Brian Kopps work)
+* Hints and Tips for various Quests
+* [MetaMapBWP](https://github.com/laytya/Metamap-vanilla) Integration
+* [TomTom Vanilla](https://github.com/cralor/TomTomVanilla) Integration
 
 > **NOTE:**
 >
@@ -20,7 +21,6 @@ and here're the links to the REAL guide:
     http://www.joanasworld.com/meet_joana_mancow.html
     http://www.joanasworld.com/azeroth.htm
     http://www.joanasworld.com/Joanas1-60Guide.pdf
-
 
 Donations
 =========
