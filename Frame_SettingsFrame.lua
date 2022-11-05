@@ -242,7 +242,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 						na = 1 - OpacitySliderFrame:GetValue()
 					end
 					r1, g1, b1, a1 = nr, ng, nb, na
-					btn.artwork:SetVertexColor(r1, g1, b1, a1)
+                              
 					--btn.background:SetVertexColor(r1, g1, b1, a1)
 					if sText == "VG_MainFrame" then
 						frame:SetBackdropColor(r1, g1, b1, a1)
@@ -269,23 +269,24 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 						a1 = .99
 						frame:SetTextColor(r1, g1, b1, a1)
 						--VGuide.db.char.UIoptions.StepFrameTextColor = {
-						tUI.ScrollFrameColor = {
+						 tUI.StepFrameTextColor = {
 							nR = r1, nG = g1, nB = b1, nA = a1,
 						}
 						oSettings:SetSettingsUI(tUI)
 					elseif sText == "VG_MainFrame_ScrollFrameLabels" then
 						local frame = getglobal("VG_MainFrame_ScrollFrameChild")
 						local shEH = frame.Entries
-						a1 = .71
+                                 a1 = .99
 						for _,v in pairs(shEH) do
 							v:SetTextColor(r1, g1, b1, a1)
 						end
 						--VGuide.db.char.UIoptions.ScrollFrameTextColor = {
-						tUI.ScrollFrameColor = {
+						tUI.ScrollFrameTextColor = {
 							nR = r1, nG = g1, nB = b1, nA = a1,
 						}
 						oSettings:SetSettingsUI(tUI)
 					end
+					btn.artwork:SetVertexColor(r1, g1, b1, a1)
 				end
 				ColorPickerFrame.cancelFunc = ColorPickerFrame.func
 				ColorPickerFrame.opacityFunc = ColorPickerFrame.func

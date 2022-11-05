@@ -90,7 +90,7 @@ function objSettings:new()
 				nR = .59,
 				nG = .59,
 				nB = .59,
-				nA = .71,
+				nA = .99,
 			},
 		},
 	    CharInfo = {
